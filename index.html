@@ -562,15 +562,20 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTimer();
     timerInterval = setInterval(updateTimer, 1000); // Update every second
 
+    // Auto-refresh the entire page every 60 seconds to prevent memory leaks
+    const pageRefreshInterval = setInterval(() => {
+        location.reload();
+    }, 60000);
+
     // Load initial prediction history table
     updatePredictionHistoryTable();
 
-    // Clean up interval when page is unloaded
+    // Clean up intervals when page is unloaded
     window.addEventListener('beforeunload', () => {
         clearInterval(timerInterval);
+        clearInterval(pageRefreshInterval);
     });
 });
 </script>
 </body>
 </html>
-                
