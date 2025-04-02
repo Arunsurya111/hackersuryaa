@@ -199,6 +199,41 @@ tr:hover td {
     cursor: not-allowed;
 }
 
+/* Notification */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    z-index: 1000;
+    animation: slideIn 0.5s, fadeOut 0.5s 2.5s forwards;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.win-notification {
+    background: linear-gradient(90deg, #00c853, #5efc82);
+    color: white;
+}
+
+.loss-notification {
+    background: linear-gradient(90deg, #d50000, #ff5252);
+    color: white;
+}
+
+@keyframes slideIn {
+    from { top: -100px; opacity: 0; }
+    to { top: 20px; opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
     .card {
@@ -225,6 +260,7 @@ tr:hover td {
 </head>
 <body>
     <h1>SURYA AI S3 ULTRA</h1>
+    <div id="notification" class="notification" style="display: none;"></div>
     <div class="card">
         <h2>AI LIVE PREDICTION</h2>
         <p id="predictedNumber">PREDICTION :--</p>
@@ -256,7 +292,7 @@ tr:hover td {
         </table>
     </div>
     <div class="card">
-        <h2>HACK PREDICTION HISTORY</h2>
+        <h2>PREDICTION HISTORY</h2>
         <table id="predictionHistoryTable">
             <thead>
                 <tr>
@@ -269,8 +305,8 @@ tr:hover td {
             <tbody></tbody>
         </table>
         <div class="pagination">
-            <button id="prevPage" disabled="">Previous</button>
-            <button id="nextPage" disabled="">Next</button>
+            <button id="prevPage" disabled>Previous</button>
+            <button id="nextPage" disabled>Next</button>
         </div>
     </div>
     <div class="card">
@@ -287,12 +323,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const historyTableBody = document.querySelector('#predictionHistoryTable tbody');
     const prevPageButton = document.getElementById('prevPage');
     const nextPageButton = document.getElementById('nextPage');
+    const notificationElement = document.getElementById('notification');
     let predictionHistory = JSON.parse(localStorage.getItem('predictionHistory')) || [];
     let lastPrediction = JSON.parse(localStorage.getItem('lastPrediction'));
     let currentPrediction = JSON.parse(localStorage.getItem('currentPrediction'));
     let currentPage = 0;
-    const itemsPerPage = 10;
-    let timerInterval;
+    const itemsPerPage = 10
+    let timerInterval;   
+    // Audio elements
+    const winSound = new Audio('https://www.soundsnap.com/ambient_game_special_treasure_touch_1_wav');
+    const lossSound = new Audio('https://www.soundsnap.com/ambient_game_special_treasure_touch_1_wav');
+
+    const showNotification = (message, isWin) => {
+        notificationElement.textContent = message;
+        notificationElement.className = isWin ? 'notification win-notification' : 'notification loss-notification';
+        notificationElement.style.display = 'block';
+        
+        // Play sound
+        if (isWin) {
+            winSound.play();
+        } else {
+            lossSound.play();
+        }
+        
+        setTimeout(() => {
+            notificationElement.style.display = 'none';
+        }, 3000);
+    };
 
     const fetchNoAverageEmerdList = () => {
         const requestData = {
@@ -339,10 +396,8 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const categorizeNumber = (number) => {
-        if (number >= 0 && number <= 4) return 'SMALL','SMALL','SMALL';
-        if (number >= 5 && number <= 9) return 'BIGG';
-        
-        
+        if (number >= 0 && number <= 4) return 'SMALL','SMALL';
+        if (number >= 5 && number <= 9) return 'BIG';
         return 'Unknown';
     };
 
@@ -355,6 +410,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const updateDataAndPrediction = () => {
         fetchNoAverageEmerdList()
             .then(data => {
+                if (!data || !data.data || !data.data.list) {
+                    console.error('Invalid data structure received');
+                    return;
+                }
+                
                 const list = data.data.list;
                 tableBody.innerHTML = '';
                 list.forEach(item => {
@@ -375,13 +435,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (!lastPrediction || lastPrediction.issueNumber !== latestIssue) {
                     if (lastPrediction) {
-                        const result = (lastPrediction.category === actualCategory) ? '✔' : '❌';
+                        const result = (lastPrediction.category === actualCategory) ? 'WIN' : 'LOSS';
                         predictionHistory.unshift({
                             issueNumber: latestIssue,
                             predictedNumber: lastPrediction.number,
                             actualNumber: latestActual,
                             result: result
                         });
+                        
+                        // Show notification
+                        if (result === 'WIN') {
+                            showNotification('CONGRATULATIONS! YOU WIN!', true);
+                        } else {
+                            showNotification('SORRY! YOU LOST! TRY AGAIN!', false);
+                        }
+                        
                         localStorage.setItem('predictionHistory', JSON.stringify(predictionHistory));
                     }
 
@@ -391,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 predictedNumberElement.textContent = `Prediction: ${currentPrediction.number} (${currentPrediction.category})`;
-                predictedPremiumElement.textContent = `: N/A`;
+                predictedPremiumElement.textContent = `ENJOY: `;
 
                 lastPrediction = {
                     issueNumber: latestIssue,
@@ -418,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${entry.issueNumber}</td>
                 <td>${entry.predictedNumber}</td>
                 <td>${entry.actualNumber}</td>
-                <td>${entry.result}</td>
+                <td class="${entry.result === 'WIN' ? 'win' : 'loss'}">${entry.result}</td>
             `;
             historyTableBody.appendChild(row);
         });
@@ -430,13 +498,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const updateTimer = () => {
         fetchGameIssue()
             .then(data => {
+                if (!data || !data.data) {
+                    console.error('Invalid data structure received');
+                    return;
+                }
+                
                 const { endTime } = data.data;
                 const endDate = new Date(endTime);
                 const now = new Date();
                 const remainingTimeMs = endDate - now;
 
                 if (remainingTimeMs <= 0) {
-                    timerElement.textContent = "Time Remaining: 00:00:00";
+                    timerElement.textContent = "00:00:00";
                     clearInterval(timerInterval);
                     updateDataAndPrediction();
                     updateTimer();
@@ -444,7 +517,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const hours = String(Math.floor(remainingTimeMs / (1000 * 60 * 60))).padStart(2, '0');
                     const minutes = String(Math.floor((remainingTimeMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
                     const seconds = String(Math.floor((remainingTimeMs % (1000 * 60)) / 1000)).padStart(2, '0');
-                    timerElement.textContent = `Time Remaining: ${hours}:${minutes}:${seconds}`;
+                    timerElement.textContent = `${hours}:${minutes}:${seconds}`;
                 }
             })
             .catch(error => console.error('Error fetching game issue for timer:', error));
@@ -468,10 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize data and start the timer
     updateDataAndPrediction();
     updateTimer();
-    timerInterval = setInterval(() => {
-        updateTimer();
-        updateDataAndPrediction();
-    }, 1000); // Update every 10 seconds
+    timerInterval = setInterval(updateTimer,1);
 
     // Load initial prediction history table
     updatePredictionHistoryTable();
@@ -480,5 +550,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
   
 </div></body></html>
-              
-                                   
