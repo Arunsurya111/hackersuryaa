@@ -1,8 +1,10 @@
-    <!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALL GAME 1Min BY SURYA</title>
-    <script src="js/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Orbitron&display=swap');
 
@@ -271,7 +273,7 @@ tr:hover td {
         <p id="timeRemaining">--:--</p>
         
     <div class="button-group">
-        <a href= "https://chat.whatsapp.com/CuakMrQkRES9huI7ayhDDm"registerButton" target="_blank">Register</a>
+        <a href="https://chat.whatsapp.com/CuakMrQkRES9huI7ayhDDm" id="registerButton" target="_blank">Register</a>
         <a href="https://chat.whatsapp.com/CuakMrQkRES9huI7ayhDDm" id="telegramButton" target="_blank">Telegram</a>
     </div>
     </div>
@@ -324,15 +326,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevPageButton = document.getElementById('prevPage');
     const nextPageButton = document.getElementById('nextPage');
     const notificationElement = document.getElementById('notification');
+    
     let predictionHistory = JSON.parse(localStorage.getItem('predictionHistory')) || [];
-    let lastPrediction = JSON.parse(localStorage.getItem('lastPrediction'));
-    let currentPrediction = JSON.parse(localStorage.getItem('currentPrediction'));
+    let lastPrediction = JSON.parse(localStorage.getItem('lastPrediction')) || null;
+    let currentPrediction = JSON.parse(localStorage.getItem('currentPrediction')) || null;
     let currentPage = 0;
-    const itemsPerPage = 10
-    let timerInterval;   
+    const itemsPerPage = 10;
+    let timerInterval;
+    let lastUpdateTime = 0;
+    
     // Audio elements
-    const winSound = new Audio('https://www.soundsnap.com/ambient_game_special_treasure_touch_1_wav');
-    const lossSound = new Audio('https://www.soundsnap.com/ambient_game_special_treasure_touch_1_wav');
+    const winSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3');
+    const lossSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-retro-arcade-lose-2027.mp3');
 
     const showNotification = (message, isWin) => {
         notificationElement.textContent = message;
@@ -341,9 +346,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Play sound
         if (isWin) {
-            winSound.play();
+            winSound.play().catch(e => console.log('Audio play failed:', e));
         } else {
-            lossSound.play();
+            lossSound.play().catch(e => console.log('Audio play failed:', e));
         }
         
         setTimeout(() => {
@@ -351,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     };
 
-    const fetchNoAverageEmerdList = () => {
+    const fetchNoAverageEmerdList = async () => {
         const requestData = {
             pageSize: 10,
             pageNo: 1,
@@ -362,19 +367,23 @@ document.addEventListener('DOMContentLoaded', function() {
             timestamp: Math.floor(Date.now() / 1000)
         };
 
-        return fetch('https://api.bdg88zf.com/api/webapi/GetNoaverageEmerdList', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Accept': 'application/json, text/plain, */*'
-            },
-            body: JSON.stringify(requestData)
-        })
-        .then(response => response.json())
-        .catch(error => console.error('Error fetching no average EMERD list data:', error));
+        try {
+            const response = await fetch('https://api.bdg88zf.com/api/webapi/GetNoaverageEmerdList', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Accept': 'application/json, text/plain, */*'
+                },
+                body: JSON.stringify(requestData)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching no average EMERD list data:', error);
+            return null;
+        }
     };
 
-    const fetchGameIssue = () => {
+    const fetchGameIssue = async () => {
         const requestData = {
             typeId: 1,
             language: 0,
@@ -383,20 +392,24 @@ document.addEventListener('DOMContentLoaded', function() {
             timestamp: Math.floor(Date.now() / 1000)
         };
 
-        return fetch('https://api.bdg88zf.com/api/webapi/GetGameIssue', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Accept': 'application/json, text/plain, */*'
-            },
-            body: JSON.stringify(requestData)
-        })
-        .then(response => response.json())
-        .catch(error => console.error('Error fetching game issue:', error));
+        try {
+            const response = await fetch('https://api.bdg88zf.com/api/webapi/GetGameIssue', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Accept': 'application/json, text/plain, */*'
+                },
+                body: JSON.stringify(requestData)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching game issue:', error);
+            return null;
+        }
     };
 
     const categorizeNumber = (number) => {
-        if (number >= 0 && number <= 4) return 'SMALL','SMALL';
+        if (number >= 0 && number <= 4) return 'SMALL';
         if (number >= 5 && number <= 9) return 'BIG';
         return 'Unknown';
     };
@@ -407,70 +420,76 @@ document.addEventListener('DOMContentLoaded', function() {
         return { number: randomNumber, category: randomCategory };
     };
 
-    const updateDataAndPrediction = () => {
-        fetchNoAverageEmerdList()
-            .then(data => {
-                if (!data || !data.data || !data.data.list) {
-                    console.error('Invalid data structure received');
-                    return;
-                }
-                
-                const list = data.data.list;
-                tableBody.innerHTML = '';
-                list.forEach(item => {
-                    const numberCategory = categorizeNumber(Number(item.number));
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.issueNumber}</td>
-                        <td>${item.number} (${numberCategory})</td>
-                        <td>${item.colour}</td>
-                        <td>${item.premium}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
+    const updateDataAndPrediction = async () => {
+        const now = Date.now();
+        // Throttle updates to prevent API spam
+        if (now - lastUpdateTime < 1000) return;
+        lastUpdateTime = now;
 
-                const latestIssue = list[0].issueNumber;
-                const latestActual = Number(list[0].number);
-                const actualCategory = categorizeNumber(latestActual);
+        try {
+            const data = await fetchNoAverageEmerdList();
+            if (!data || !data.data || !data.data.list || data.data.list.length === 0) {
+                console.error('Invalid data structure received or empty list');
+                return;
+            }
+            
+            const list = data.data.list;
+            tableBody.innerHTML = '';
+            list.forEach(item => {
+                const numberCategory = categorizeNumber(Number(item.number));
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.issueNumber}</td>
+                    <td>${item.number} (${numberCategory})</td>
+                    <td>${item.colour}</td>
+                    <td>${item.premium}</td>
+                `;
+                tableBody.appendChild(row);
+            });
 
-                if (!lastPrediction || lastPrediction.issueNumber !== latestIssue) {
-                    if (lastPrediction) {
-                        const result = (lastPrediction.category === actualCategory) ? 'WIN' : 'LOSS';
-                        predictionHistory.unshift({
-                            issueNumber: latestIssue,
-                            predictedNumber: lastPrediction.number,
-                            actualNumber: latestActual,
-                            result: result
-                        });
-                        
-                        // Show notification
-                        if (result === 'WIN') {
-                            showNotification('CONGRATULATIONS! YOU WIN!', true);
-                        } else {
-                            showNotification('SORRY! YOU LOST! TRY AGAIN!', false);
-                        }
-                        
-                        localStorage.setItem('predictionHistory', JSON.stringify(predictionHistory));
+            const latestIssue = list[0].issueNumber;
+            const latestActual = Number(list[0].number);
+            const actualCategory = categorizeNumber(latestActual);
+
+            if (!lastPrediction || lastPrediction.issueNumber !== latestIssue) {
+                if (lastPrediction) {
+                    const result = (lastPrediction.category === actualCategory) ? 'WIN' : 'LOSS';
+                    predictionHistory.unshift({
+                        issueNumber: latestIssue,
+                        predictedNumber: lastPrediction.number,
+                        actualNumber: latestActual,
+                        result: result
+                    });
+                    
+                    // Show notification
+                    if (result === 'WIN') {
+                        showNotification('CONGRATULATIONS! YOU WIN!', true);
+                    } else {
+                        showNotification('SORRY! YOU LOST! TRY AGAIN!', false);
                     }
-
-                    currentPrediction = generateRandomPrediction();
-                    currentPrediction.issueNumber = latestIssue;
-                    localStorage.setItem('currentPrediction', JSON.stringify(currentPrediction));
+                    
+                    localStorage.setItem('predictionHistory', JSON.stringify(predictionHistory));
                 }
 
-                predictedNumberElement.textContent = `Prediction: ${currentPrediction.number} (${currentPrediction.category})`;
-                predictedPremiumElement.textContent = `ENJOY: `;
+                currentPrediction = generateRandomPrediction();
+                currentPrediction.issueNumber = latestIssue;
+                localStorage.setItem('currentPrediction', JSON.stringify(currentPrediction));
+            }
 
-                lastPrediction = {
-                    issueNumber: latestIssue,
-                    number: currentPrediction.number,
-                    category: currentPrediction.category
-                };
-                localStorage.setItem('lastPrediction', JSON.stringify(lastPrediction));
+            predictedNumberElement.textContent = `PREDICTION: ${currentPrediction.number} (${currentPrediction.category})`;
+            predictedPremiumElement.textContent = `ENJOY: ${currentPrediction.category === 'BIG' ? 'PLAY BIG' : 'PLAY SMALL'}`;
 
-                updatePredictionHistoryTable();
-            })
-            .catch(error => console.error('Error updating data and prediction:', error));
+            lastPrediction = {
+                issueNumber: latestIssue,
+                number: currentPrediction.number,
+                category: currentPrediction.category
+            };
+            localStorage.setItem('lastPrediction', JSON.stringify(lastPrediction));
+
+            updatePredictionHistoryTable();
+        } catch (error) {
+            console.error('Error updating data and prediction:', error);
+        }
     };
 
     const updatePredictionHistoryTable = () => {
@@ -484,8 +503,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${entry.issueNumber}</td>
-                <td>${entry.predictedNumber}</td>
-                <td>${entry.actualNumber}</td>
+                <td>${entry.predictedNumber} (${categorizeNumber(entry.predictedNumber)})</td>
+                <td>${entry.actualNumber} (${categorizeNumber(entry.actualNumber)})</td>
                 <td class="${entry.result === 'WIN' ? 'win' : 'loss'}">${entry.result}</td>
             `;
             historyTableBody.appendChild(row);
@@ -495,32 +514,32 @@ document.addEventListener('DOMContentLoaded', function() {
         nextPageButton.disabled = end >= predictionHistory.length;
     };
 
-    const updateTimer = () => {
-        fetchGameIssue()
-            .then(data => {
-                if (!data || !data.data) {
-                    console.error('Invalid data structure received');
-                    return;
-                }
-                
-                const { endTime } = data.data;
-                const endDate = new Date(endTime);
-                const now = new Date();
-                const remainingTimeMs = endDate - now;
+    const updateTimer = async () => {
+        try {
+            const data = await fetchGameIssue();
+            if (!data || !data.data) {
+                console.error('Invalid data structure received');
+                return;
+            }
+            
+            const { endTime } = data.data;
+            const endDate = new Date(endTime);
+            const now = new Date();
+            const remainingTimeMs = endDate - now;
 
-                if (remainingTimeMs <= 0) {
-                    timerElement.textContent = "00:00:00";
-                    clearInterval(timerInterval);
-                    updateDataAndPrediction();
-                    updateTimer();
-                } else {
-                    const hours = String(Math.floor(remainingTimeMs / (1000 * 60 * 60))).padStart(2, '0');
-                    const minutes = String(Math.floor((remainingTimeMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                    const seconds = String(Math.floor((remainingTimeMs % (1000 * 60)) / 1000)).padStart(2, '0');
-                    timerElement.textContent = `${hours}:${minutes}:${seconds}`;
-                }
-            })
-            .catch(error => console.error('Error fetching game issue for timer:', error));
+            if (remainingTimeMs <= 0) {
+                timerElement.textContent = "00:00:00";
+                // Update data immediately when timer expires
+                await updateDataAndPrediction();
+            } else {
+                const hours = String(Math.floor(remainingTimeMs / (1000 * 60 * 60))).padStart(2, '0');
+                const minutes = String(Math.floor((remainingTimeMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                const seconds = String(Math.floor((remainingTimeMs % (1000 * 60)) / 1000)).padStart(2, '0');
+                timerElement.textContent = `${hours}:${minutes}:${seconds}`;
+            }
+        } catch (error) {
+            console.error('Error updating timer:', error);
+        }
     };
 
     // Pagination controls
@@ -541,12 +560,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize data and start the timer
     updateDataAndPrediction();
     updateTimer();
-    timerInterval = setInterval(updateTimer,1);
+    timerInterval = setInterval(updateTimer, 1000); // Update every second
 
     // Load initial prediction history table
     updatePredictionHistoryTable();
+
+    // Clean up interval when page is unloaded
+    window.addEventListener('beforeunload', () => {
+        clearInterval(timerInterval);
+    });
 });
 </script>
-
-  
-</div></body></html>
+</body>
+</html>
+                
