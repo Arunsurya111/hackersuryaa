@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const categorizeNumber = (number) => {
-        if (number >= 0 && number <= 4) return 'SMALL','SMALL','SMALL';
+        if (number >= 0 && number <= 4) return 'SMALL','SMALL';
         if (number >= 5 && number <= 9) return 'BIG','BIG';
         return 'Unknown';
     };
@@ -477,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             predictedNumberElement.textContent = `PREDICTION: ${currentPrediction.number} (${currentPrediction.category})`;
-            predictedPremiumElement.textContent = `ENJOY: ${currentPrediction.category === 'BIG' ? 'PLAY BIG' : 'PLAY SMALL'}`;
+            predictedPremiumElement.textContent = `BET: ${currentPrediction.category === 'BIG' ? 'PLAY BIG' : 'PLAY SMALL'}`;
 
             lastPrediction = {
                 issueNumber: latestIssue,
@@ -560,12 +560,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize data and start the timer
     updateDataAndPrediction();
     updateTimer();
-    timerInterval = setInterval(updateTimer, 1000); // Update every second
+    timerInterval = setInterval(updateTimer, 60); // Update every second
 
     // Auto-refresh the entire page every 60 seconds to prevent memory leaks
     const pageRefreshInterval = setInterval(() => {
         location.reload();
-    }, 60000);
+    }, 9000);
 
     // Load initial prediction history table
     updatePredictionHistoryTable();
