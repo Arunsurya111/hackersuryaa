@@ -264,12 +264,12 @@ tr:hover td {
     <h1>SURYA AI S3 ULTRA</h1>
     <div id="notification" class="notification" style="display: none;"></div>
     <div class="card">
-        <h2>AI LIVE PREDICTION</h2>
+        <h2>AI LIVE PREDICTION 🤖</h2>
         <p id="predictedNumber">PREDICTION :--</p>
         <p id="predictedPremium">ENJOY: --</p>
     </div>
     <div class="card">
-        <h2>TIMER</h2>
+        <h2>TIMER ⏳</h2>
         <p id="timeRemaining">--:--</p>
         
     <div class="button-group">
@@ -477,7 +477,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             predictedNumberElement.textContent = `PREDICTION: ${currentPrediction.number} (${currentPrediction.category})`;
-            predictedPremiumElement.textContent = `BET: ${currentPrediction.category === 'BIG' ? 'PLAY BIG' : 'PLAY SMALL'}`;
+            predictedPremiumElement.textContent = `BET 💵: ${currentPrediction.category === 'BIG' ? 'PLAY BIG 👍🏻 ' : 'PLAY SMALL 👍🏻'}`;
+            predictedPremiumElement.textContent = `BET 💵: ${currentPrediction.category === 'BIG' ? 'PLAY BIG 🟢 ' : 'PLAY SMALL 🔴'}`;
+            predictedPremiumElement.textContent = `BET 💵: ${currentPrediction.category === 'BIG' ? 'PLAY BIG  🔴 ' : 'PLAY SMALL 🟢'}`;
+
 
             lastPrediction = {
                 issueNumber: latestIssue,
