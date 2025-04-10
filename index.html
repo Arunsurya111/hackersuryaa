@@ -1096,10 +1096,10 @@
                 <h2 class="text-lg font-semibold text-gray-300 text-center">Export Data</h2>
                 <div class="flex gap-2 mt-4">
                     <button class="btn flex-1" onclick="exportData('csv')">
-                        <i class="fas fa-file-csv mr-2"></i> CSV
+                        <i class="fas fa-file-csv mr-2"></i> CSV FILE
                     </button>
                     <button class="btn flex-1" onclick="exportData('json')">
-                        <i class="fas fa-file-code mr-2"></i> JSON
+                        <i class="fas fa-file-code mr-2"></i> JSON FILE
                     </button>
                 </div>
             </div>
@@ -1861,7 +1861,7 @@
                 updateCountdown(seconds);
                 
                 if (seconds <= 0) {
-                    seconds = 5;
+                    seconds = 60;
                     if (settings.autoRefresh) {
                         fetchCurrentGameIssue();
                     }
@@ -2405,7 +2405,7 @@
                 const server1El = document.createElement('div');
                 server1El.className = "text-center";
                 if (entry.server1Prediction) {
-                    server1El.innerHTML = `<span class="${entry.server1Prediction === 'BIG' ? 'text-blue-400' : 'text-yellow-400'} font-bold">${entry.server1Prediction}</span>`;
+                    server1El.innerHTML = `<span class="${entry.server1Prediction === 'BIG' ? 'text-yellow-400' : 'text-blue-400'} font-bold">${entry.server1Prediction}</span>`;
                 } else {
                     server1El.textContent = '-';
                 }
