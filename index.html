@@ -1936,7 +1936,7 @@
             // Update message and icon
             robotMessage.textContent = message;
             robotMessage.style.display = 'block';
-            robotIcon.textContent = isWin ? '👑' : '😢'; // Smile for win, sad for loss
+            robotIcon.textContent = isWin ? '💵' : '☠️'; // Smile for win, sad for loss
 
             // Hide message after 5 seconds
             setTimeout(() => {
@@ -1960,40 +1960,7 @@
         }
         
         // Place a bet (simulated)
-        function placeBet(type) {
-            let betAmount = settings.betAmount;
-            let betType = '';
-            
-            switch(type) {
-                case 'green':
-                    betType = 'GREEN';
-                    break;
-                case 'red':
-                    betType = 'RED';
-                    break;
-                case 'big':
-                    betType = 'BIG';
-                    break;
-                case 'small':
-                    betType = 'SMALL';
-                    break;
-            }
-            
-            showNotification(`Placed ${betAmount} on ${betType}`, 'info');
-            
-            // Simulate auto-bet on high confidence
-            if (settings.autoBet) {
-                const confidence = type === 'big' || type === 'small' 
-                    ? parseInt(document.getElementById('server1-confidence-value').textContent) 
-                    : parseInt(document.getElementById('server2-confidence-value').textContent);
-                
-                if (confidence > 70) {
-                    setTimeout(() => {
-                        showNotification(`Auto-bet placed ${betAmount * 2} on ${betType} (High Confidence)`, 'success');
-                    }, 1000);
-                }
-            }
-        }
+        
         
         // Export data
         function exportData(format) {
@@ -2396,7 +2363,7 @@
 
                 // Check if either server prediction was correct
                 const server1Correct = prevEntry.server1Prediction === actualBigSmall;
-                const server2Correct = prevEntry.server2Prediction === actualColor;
+                const server2Correct = prevEntry.server2Prediction === actualBigSmall;
                 
                 prevEntry.status = (server1Correct || server2Correct) ? "WIN" : "LOSS";
 
@@ -2410,7 +2377,7 @@
                         showRobotMessage(`🎉 Server 2 correct! ${actualColor}`, true);
                     }
                 } else if (prevEntry.status === "LOSS") {
-                    showRobotMessage(`😢 Loss! Actual: ${actualBigSmall}/${actualColor}`, false);
+                    showRobotMessage(`☠️ Loss! Actual: ${actualBigSmall}/${actualColor}`, false);
                 }
                 
                 // Update current streak display
