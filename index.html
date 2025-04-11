@@ -2421,8 +2421,9 @@
                 
                 // Status
                 const statusEl = document.createElement('div');
-                statusEl.className = `font-bold text-center ${entry.status === 'WIN' ? 'text-green-400' : entry.status === 'LOSS' ? 'text-red-400' : 'text-yellow-400'}`;
-                statusEl.textContent = entry.status;
+                statusEl.className = `font-bold text-center ${entry.status === 'WIN' ? 'text-green-400 [text-shadow:0_0_8px_rgba(74,222,128,0.8)]' : entry.status === 'LOSS' ? 'text-red-400' : 'text-yellow-400'}`;
+statusEl.textContent = entry.status;
+                
                 
                 // Append all elements to the box
                 box.appendChild(periodEl);
