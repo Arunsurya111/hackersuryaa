@@ -2080,40 +2080,12 @@
                 
                 // SERVER 1: SMALL/BIG PREDICTION
                 // Generate once and save to a constant (fixed during the session or until manually regenerated)
-const fixedRandomBigSmall = generateFixedBigSmall();
+function generateFixedBigSmall() { return recentNumbers.map(() => (Math.random() < 0.5 ? 'SMALL' : 'BIG')); }
 
-// Function to generate the random BIG/SMALL list
-// Generate fixed random result per minute
-// Generate once and save to a constant (fixed during the session or until manually regenerated)
-const fixedRandomBigSmall = generateFixedBigSmall();
-
-// Function to generate the random BIG/SMALL list
-const lastTenBigSmall = recentNumbers.map(() => (Math.random() < 0.5 ? 'SMALL' : 'BIG'));
-
-// Use this fixed result
+// Use this fixed result const lastTenBigSmall = fixedRandomBigSmall;
+           
 
 
-                // Generate Server 1 prediction
-                let server1Prediction, server1Confidence;
-                const bigFrequency = recentNumbers.filter(entry => entry.number >= 5).length;
-                
-                // Check active strategy for server1
-                const server1Strategy = document.querySelector('.server1 .strategy-btn.active').textContent.toLowerCase();
-                
-                if (server1Strategy === 'streak') {
-                    // Streak-based strategy
-                    server1Prediction = (bigStreak >= 3) ? 'SMALL' : (smallStreak >= 3) ? 'BIG' :
-                        (bigFrequency >= 6) ? 'SMALL' : 'BIG';
-                    server1Confidence = Math.min(30 + Math.max(bigStreak, smallStreak) * 15, 90);
-                } else if (server1Strategy === 'frequency') {
-                    // Frequency-based strategy
-                    server1Prediction = (bigFrequency >= 6) ? 'SMALL' : 'BIG';
-                    server1Confidence = Math.min(50 + Math.abs(bigFrequency - 5) * 10, 90);
-                } else {
-                    // Neural strategy (simulated)
-                    server1Prediction = Math.random() > 0.5 ? 'BIG' : 'SMALL';
-                    server1Confidence = Math.floor(65 + Math.random() * 30);
-                }
                 
                 // Update Server 1 UI
                 document.getElementById('server1-prediction').textContent = server1Prediction;
