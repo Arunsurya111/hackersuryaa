@@ -2088,9 +2088,8 @@ const fixedRandomBigSmall = generateFixedBigSmall();
 const fixedRandomBigSmall = generateFixedBigSmall();
 
 // Function to generate the random BIG/SMALL list
-function generateFixedBigSmall() {
-  return recentNumbers.map(() => (Math.random() < 0.5 ? 'SMALL' : 'BIG'));
-}
+const currentMinute = new Date().getMinutes();
+const lastTenBigSmall = recentNumbers.map((_, i) => (Math.sin(currentMinute + i) * 10000 % 1) < 0.5 ? 'SMALL' : 'BIG');
 
 // Use this fixed result
 const lastTenBigSmall = fixedRandomBigSmall;
