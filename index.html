@@ -2079,9 +2079,16 @@
                 const recentNumbers = results.slice(0, 10);
                 
                 // SERVER 1: SMALL/BIG PREDICTION
-                const lastTenBigSmall = recentNumbers.map(() => (Math.random() < 0.5 ? 'SMALL' : 'BIG'));
-                let bigStreak = 0, smallStreak = 0;
-                let currentBigSmallStreak = null;
+                // Generate once and save to a constant (fixed during the session or until manually regenerated)
+const fixedRandomBigSmall = generateFixedBigSmall();
+
+// Function to generate the random BIG/SMALL list
+function generateFixedBigSmall() {
+  return recentNumbers.map(() => (Math.random() < 0.5 ? 'SMALL' : 'BIG'));
+}
+
+// Use this fixed result
+const lastTenBigSmall = fixedRandomBigSmall;
 
                 lastTenBigSmall.forEach(bs => {
                     if (bs === currentBigSmallStreak) {
