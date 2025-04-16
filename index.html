@@ -2084,32 +2084,16 @@ const fixedRandomBigSmall = generateFixedBigSmall();
 
 // Function to generate the random BIG/SMALL list
 // Generate fixed random result per minute
-const currentMinute = new Date().getMinutes();
-const fixedSeed = currentMinute; // Seed based on current minute
+// Generate once and save to a constant (fixed during the session or until manually regenerated)
+const fixedRandomBigSmall = generateFixedBigSmall();
 
-function seededRandom(seed) {
-    const x = Math.sin(seed) * 10000;
-    return x - Math.floor(x);
-}
-
+// Function to generate the random BIG/SMALL list
 function generateFixedBigSmall() {
-  return recentNumbers.map((_, index) => (seededRandom(fixedSeed + index) < 0.5 ? 'SMALL' : 'BIG'));
+  return recentNumbers.map(() => (Math.random() < 0.5 ? 'SMALL' : 'BIG'));
 }
 
 // Use this fixed result
-const lastTenBigSmall = generateFixedBigSmall();
-
-// (Your original streak logic remains unchanged)
-lastTenBigSmall.forEach(bs => {
-    if (bs === currentBigSmallStreak) {
-        if (bs === 'BIG') bigStreak++;
-        else smallStreak++;
-    } else {
-        currentBigSmallStreak = bs;
-        bigStreak = (bs === 'BIG') ? 3 : 0;
-        smallStreak = (bs === 'SMALL') ? 1 : 0;
-    }
-});
+const lastTenBigSmall = fixedRandomBigSmall;
 
                 // Generate Server 1 prediction
                 let server1Prediction, server1Confidence;
