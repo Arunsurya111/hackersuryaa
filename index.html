@@ -1,76 +1,1510 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ULTRA AI PREDICTOR - SURYA S3 VIP</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJ57Mkec8vl-6QiVzs8nsCXMSa82xwuLeKEIBvDdLif6UbM-CCO8tAsLFP&s=10'); /* Replace with your image URL */
-            background-size: cover;
-            background-position: center;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            color: white;
-        }
-        .login-container {
-            background: rgba(0, 0, 0, 0.7); /* Dark transparent background */
-            padding: 20px;
-            width: 300px;
-            margin: 100px auto;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
-    <script>
-        function checkLogin() {
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            
-            // Prevent empty fields
-            if (username.trim() === "" || password.trim() === "") {
-                alert("Please enter both username and password.");
-                return;
-            }
+:root {
+    --primary: #6a11cb;
+    --secondary: #2575fc;
+    --accent: #ff4d4d;
+    --vip-gold: #FFD700;
+    --vip-purple: #8A2BE2;
+    --text: #ffffff;
+    --bg-dark: #121212;
+    --bg-light: #1e1e1e;
+    --success: #00e676;
+    --danger: #ff5252;
+    --warning: #ffab40;
+    --info: #40c4ff;
+}
 
-            if (username === "9344" && password === "9344") {
-                window.location.href = "https://arunsurya111.github.io/Suryaak/";
-            } else {
-                alert("Invalid Username or Password🔐 Please buy username password from surya !");
-            }
-        }
-    </script>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.version-badge {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    background: var(--accent);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.vip-badge {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    background: linear-gradient(to right, var(--vip-gold), var(--vip-purple));
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: rgba(30, 30, 30, 0.7);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.vip-card {
+    border: 2px solid var(--vip-gold);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: var(--info);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vip-title {
+    color: var(--vip-gold);
+}
+
+.card-title i {
+    font-size: 1.5rem;
+}
+
+.prediction-display {
+    text-align: center;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.vip-prediction {
+    background: linear-gradient(to right, rgba(138, 43, 226, 0.3), rgba(255, 215, 0, 0.3));
+    border: 1px solid var(--vip-gold);
+}
+
+.prediction-number {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+}
+
+.vip-number {
+    background: linear-gradient(to right, var(--vip-gold), var(--vip-purple));
+}
+
+.prediction-label {
+    font-size: 1.2rem;
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.vip-label {
+    color: var(--vip-gold);
+    font-weight: bold;
+}
+
+.timer-display {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
+    margin: 20px 0;
+    color: var(--accent);
+    font-family: 'Courier New', monospace;
+}
+
+.vip-timer {
+    color: var(--vip-gold);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.btn-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    color: white;
+}
+
+.btn-vip {
+    background: linear-gradient(to right, var(--vip-gold), var(--vip-purple));
+    color: black;
+    font-weight: bold;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-vip:hover {
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+}
+
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.vip-table th {
+    background: linear-gradient(to right, var(--vip-gold), var(--vip-purple));
+}
+
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-win {
+    background: rgba(0, 230, 118, 0.2);
+    color: var(--success);
+}
+
+.status-loss {
+    background: rgba(255, 82, 82, 0.2);
+    color: var(--danger);
+}
+
+.vip-status {
+    background: rgba(255, 215, 0, 0.2);
+    color: var(--vip-gold);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination-btn {
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.vip-pagination-btn {
+    background: rgba(255, 215, 0, 0.2);
+    color: var(--vip-gold);
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.vip-pagination-btn:hover:not(:disabled) {
+    background: rgba(255, 215, 0, 0.3);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.5s, fadeOut 0.5s 2.5s forwards;
+}
+
+.vip-notification {
+    background: linear-gradient(to right, var(--vip-gold), var(--vip-purple));
+    color: black;
+}
+
+.notification-success {
+    background: var(--success);
+    color: white;
+}
+
+.notification-error {
+    background: var(--danger);
+    color: white;
+}
+
+@keyframes slideIn {
+    from { top: -100px; opacity: 0; }
+    to { top: 20px; opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
+
+.vip-stat-card {
+    background: linear-gradient(to right, rgba(138, 43, 226, 0.2), rgba(255, 215, 0, 0.2));
+    border: 1px solid var(--vip-gold);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 5px 0;
+}
+
+.vip-stat-value {
+    color: var(--vip-gold);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.vip-stat-label {
+    color: var(--vip-gold);
+}
+
+.win-rate {
+    color: var(--success);
+}
+
+.loss-rate {
+    color: var(--danger);
+}
+
+.current-streak {
+    color: var(--warning);
+}
+
+.vip-section {
+    margin: 30px 0;
+    padding: 20px;
+    border-radius: 15px;
+    background: linear-gradient(to right, rgba(138, 43, 226, 0.1), rgba(255, 215, 0, 0.1));
+    border: 1px solid var(--vip-gold);
+}
+
+.vip-section-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--vip-gold);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.vip-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.vip-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.vip-feature-icon {
+    color: var(--vip-gold);
+    font-size: 1.5rem;
+    margin-top: 3px;
+}
+
+.vip-feature-text h3 {
+    color: var(--vip-gold);
+    margin-bottom: 5px;
+}
+
+.vip-feature-text p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.vip-cta {
+    text-align: center;
+    margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .prediction-number {
+        font-size: 2rem;
+    }
+    
+    .timer-display {
+        font-size: 1.8rem;
+    }
+    
+    .vip-features {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 1.8rem;
+    }
+    
+    .version-badge, .vip-badge {
+        top: -10px;
+        right: 10px;
+        font-size: 0.7rem;
+    }
+    
+    .vip-badge {
+        left: 10px;
+        right: auto;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* VIP Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    margin: 5% auto;
+    padding: 30px;
+    border: 1px solid var(--vip-gold);
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: var(--vip-gold);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: var(--vip-purple);
+}
+
+.modal-title {
+    text-align: center;
+    color: var(--vip-gold);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.vip-packages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.vip-package {
+    background: rgba(30, 30, 30, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid var(--vip-gold);
+    transition: all 0.3s;
+}
+
+.vip-package:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+}
+
+.vip-package-title {
+    color: var(--vip-gold);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.vip-package-price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin: 15px 0;
+}
+
+.vip-package-price span {
+    color: var(--vip-gold);
+}
+
+.vip-package-features {
+    text-align: left;
+    margin: 20px 0;
+    padding-left: 20px;
+}
+
+.vip-package-features li {
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    list-style-type: none;
+    position: relative;
+    padding-left: 25px;
+}
+
+.vip-package-features li:before {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--vip-gold);
+    position: absolute;
+    left: 0;
+}
+
+.vip-package-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, var(--vip-gold), var(--vip-purple));
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.vip-package-btn:hover {
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+/* VIP Login Modal */
+.login-modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.login-content {
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    margin: 10% auto;
+    padding: 30px;
+    border: 1px solid var(--vip-gold);
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+    position: relative;
+}
+
+.login-title {
+    text-align: center;
+    color: var(--vip-gold);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    color: var(--vip-gold);
+    font-weight: 600;
+}
+
+.form-group input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--vip-gold);
+}
+
+.login-btn {
+    background: linear-gradient(to right, var(--vip-gold), var(--vip-purple));
+    color: black;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.login-footer a {
+    color: var(--vip-gold);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+</style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>☣️ WELCOME TO BCA SURYA BABY AI S1 AI ☣️</h2>
-        <div>
-            <label>Username:</label>
-            <input type="text" id="username" placeholder="Enter username">
+    <div class="container">
+        <header>
+            <div class="version-badge">S3 ULTRA</div>
+            <div class="vip-badge">VIP EDITION</div>
+            <div class="logo">AI PREDICTOR</div>
+            <div class="subtitle">Powered by Advanced Machine Learning Algorithms</div>
+        </header>
+
+        <div id="notification" class="notification" style="display: none;"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card vip-stat-card">
+                <div class="stat-label vip-stat-label">VIP Win Rate</div>
+                <div class="stat-value vip-stat-value" id="winRate">--%</div>
+            </div>
+            <div class="stat-card vip-stat-card">
+                <div class="stat-label vip-stat-label">VIP Loss Rate</div>
+                <div class="stat-value vip-stat-value" id="lossRate">--%</div>
+            </div>
+            <div class="stat-card vip-stat-card">
+                <div class="stat-label vip-stat-label">VIP Current Streak</div>
+                <div class="stat-value vip-stat-value" id="currentStreak">--</div>
+            </div>
+            <div class="stat-card vip-stat-card">
+                <div class="stat-label vip-stat-label">VIP Accuracy</div>
+                <div class="stat-value vip-stat-value" id="accuracy">--%</div>
+            </div>
         </div>
-        <div>
-            <label>Password:</label>
-            <input type="password" id="password" placeholder="Enter password">
+
+        <div class="grid">
+            <div class="card vip-card">
+                <div class="card-title vip-title">
+                    <i class="fas fa-crown"></i>
+                    <span>VIP AI PREDICTION</span>
+                </div>
+                <div class="prediction-display vip-prediction">
+                    <div class="prediction-number vip-number" id="predictedNumber">--</div>
+                    <div class="prediction-label vip-label" id="predictedPremium">Analyzing VIP patterns...</div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-vip" id="vipLoginBtn" onclick="openLoginModal()">
+                        <i class="fas fa-lock"></i> VIP Login
+                    </button>
+                    <button class="btn btn-primary" onclick="window.open('https://chat.whatsapp.com/CuakMrQkRES9huI7ayhDDm', '_blank')">
+                        <i class="fab fa-whatsapp"></i> VIP Group
+                    </button>
+                </div>
+            </div>
+
+            <div class="card vip-card">
+                <div class="card-title vip-title">
+                    <i class="fas fa-clock"></i>
+                    <span>VIP NEXT PREDICTION IN</span>
+                </div>
+                <div class="timer-display vip-timer" id="timeRemaining">--:--:--</div>
+                <div class="btn-group">
+                    <button class="btn btn-vip" onclick="openVipModal()">
+                        <i class="fas fa-crown"></i> Become VIP
+                    </button>
+                    <button class="btn btn-primary" onclick="window.open('https://t.me/yourvipchannel', '_blank')">
+                        <i class="fab fa-telegram"></i> VIP Telegram
+                    </button>
+                </div>
+            </div>
         </div>
-        <button onclick="checkLogin()">Login</button>
+
+        <!-- VIP Features Section -->
+        <div class="vip-section">
+            <div class="vip-section-title">
+                <i class="fas fa-crown"></i>
+                <span>VIP EXCLUSIVE FEATURES</span>
+            </div>
+            <div class="vip-features">
+                <div class="vip-feature">
+                    <div class="vip-feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="vip-feature-text">
+                        <h3>Instant Predictions</h3>
+                        <p>Get predictions 30 seconds before public release for early advantage.</p>
+                    </div>
+                </div>
+                <div class="vip-feature">
+                    <div class="vip-feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="vip-feature-text">
+                        <h3>Advanced Analytics</h3>
+                        <p>Access to premium prediction models with 85%+ accuracy rate.</p>
+                    </div>
+                </div>
+                <div class="vip-feature">
+                    <div class="vip-feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="vip-feature-text">
+                        <h3>AI Pattern Detection</h3>
+                        <p>Exclusive access to our deep learning algorithm for pattern recognition.</p>
+                    </div>
+                </div>
+                <div class="vip-feature">
+                    <div class="vip-feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="vip-feature-text">
+                        <h3>24/7 Support</h3>
+                        <p>Dedicated VIP support team available round the clock.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="vip-cta">
+                <button class="btn btn-vip" onclick="openVipModal()" style="padding: 15px 30px; font-size: 1.2rem;">
+                    <i class="fas fa-crown"></i> JOIN VIP NOW
+                </button>
+            </div>
+        </div>
+
+        <div class="card vip-card">
+            <div class="card-title vip-title">
+                <i class="fas fa-database"></i>
+                <span>VIP LATEST RESULTS</span>
+            </div>
+            <div class="table-container">
+                <table id="dataTable" class="vip-table">
+                    <thead>
+                        <tr>
+                            <th>Issue</th>
+                            <th>Number</th>
+                            <th>Color</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card vip-card">
+            <div class="card-title vip-title">
+                <i class="fas fa-history"></i>
+                <span>VIP PREDICTION HISTORY</span>
+            </div>
+            <div class="table-container">
+                <table id="predictionHistoryTable" class="vip-table">
+                    <thead>
+                        <tr>
+                            <th>Issue</th>
+                            <th>Prediction</th>
+                            <th>Result</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <button class="pagination-btn vip-pagination-btn" id="prevPage" disabled>
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <button class="pagination-btn vip-pagination-btn" id="nextPage" disabled>
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
     </div>
+
+    <!-- VIP Modal -->
+    <div id="vipModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeVipModal()">&times;</span>
+            <div class="modal-title">
+                <i class="fas fa-crown"></i>
+                UPGRADE TO VIP
+            </div>
+            <p style="text-align: center; color: rgba(255, 255, 255, 0.8); margin-bottom: 20px;">
+                Join our VIP program to get access to premium predictions with higher accuracy, 
+                early notifications, and exclusive support.
+            </p>
+            
+            <div class="vip-packages">
+                <div class="vip-package">
+                    <div class="vip-package-title">BRONZE</div>
+                    <div class="vip-package-price">$49 <span>/month</span></div>
+                    <ul class="vip-package-features">
+                        <li>80% Accuracy Predictions</li>
+                        <li>10 Second Early Access</li>
+                        <li>Basic Support</li>
+                        <li>Daily 5 Premium Tips</li>
+                    </ul>
+                    <button class="vip-package-btn" onclick="subscribeVip('bronze')">
+                        SUBSCRIBE NOW
+                    </button>
+                </div>
+                
+                <div class="vip-package">
+                    <div class="vip-package-title">SILVER</div>
+                    <div class="vip-package-price">$99 <span>/month</span></div>
+                    <ul class="vip-package-features">
+                        <li>85% Accuracy Predictions</li>
+                        <li>30 Second Early Access</li>
+                        <li>Priority Support</li>
+                        <li>Daily 10 Premium Tips</li>
+                        <li>Pattern Analysis Reports</li>
+                    </ul>
+                    <button class="vip-package-btn" onclick="subscribeVip('silver')">
+                        SUBSCRIBE NOW
+                    </button>
+                </div>
+                
+                <div class="vip-package">
+                    <div class="vip-package-title">GOLD</div>
+                    <div class="vip-package-price">$199 <span>/month</span></div>
+                    <ul class="vip-package-features">
+                        <li>90% Accuracy Predictions</li>
+                        <li>1 Minute Early Access</li>
+                        <li>24/7 Dedicated Support</li>
+                        <li>Unlimited Premium Tips</li>
+                        <li>Advanced Pattern Analysis</li>
+                        <li>Personal AI Assistant</li>
+                    </ul>
+                    <button class="vip-package-btn" onclick="subscribeVip('gold')">
+                        SUBSCRIBE NOW
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIP Login Modal -->
+    <div id="loginModal" class="login-modal">
+        <div class="login-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <div class="login-title">
+                <i class="fas fa-lock"></i>
+                VIP LOGIN
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="vipUsername">VIP Username</label>
+                    <input type="text" id="vipUsername" placeholder="Enter your VIP username" required>
+                </div>
+                <div class="form-group">
+                    <label for="vipPassword">VIP Password</label>
+                    <input type="password" id="vipPassword" placeholder="Enter your VIP password" required>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> LOGIN
+                </button>
+            </form>
+            <div class="login-footer">
+                Not a VIP member? <a href="#" onclick="closeLoginModal();openVipModal()">Join now</a>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const tableBody = document.querySelector('#dataTable tbody');
+    const predictedNumberElement = document.getElementById('predictedNumber');
+    const predictedPremiumElement = document.getElementById('predictedPremium');
+    const timerElement = document.getElementById('timeRemaining');
+    const historyTableBody = document.querySelector('#predictionHistoryTable tbody');
+    const prevPageButton = document.getElementById('prevPage');
+    const nextPageButton = document.getElementById('nextPage');
+    const notificationElement = document.getElementById('notification');
+    const winRateElement = document.getElementById('winRate');
+    const lossRateElement = document.getElementById('lossRate');
+    const currentStreakElement = document.getElementById('currentStreak');
+    const accuracyElement = document.getElementById('accuracy');
+    const vipModal = document.getElementById('vipModal');
+    const loginModal = document.getElementById('loginModal');
+    const loginForm = document.getElementById('loginForm');
+    const vipLoginBtn = document.getElementById('vipLoginBtn');
+
+    // Data variables
+    let predictionHistory = JSON.parse(localStorage.getItem('predictionHistory')) || [];
+    let lastPrediction = JSON.parse(localStorage.getItem('lastPrediction')) || null;
+    let currentPrediction = JSON.parse(localStorage.getItem('currentPrediction')) || null;
+    let currentPage = 0;
+    const itemsPerPage = 10;
+    let timerInterval;
+    let lastUpdateTime = 0;
+    let currentStreak = 0;
+    let maxStreak = 0;
+    let isVip = localStorage.getItem('isVip') === 'true' || false;
+    let vipLevel = localStorage.getItem('vipLevel') || null;
+
+    // VIP credentials (in a real app, this would be server-side)
+    const vipCredentials = {
+        'bronze': { username: 'bronze', password: 'bronze123', level: 'bronze' },
+        'silver': { username: 'silver', password: 'silver123', level: 'silver' },
+        'gold': { username: 'gold', password: 'gold123', level: 'gold' }
+    };
+
+    // Initialize VIP status
+    updateVipStatus();
+
+    // Audio elements
+    const winSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3');
+    const lossSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-retro-arcade-lose-2027.mp3');
+    const vipSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+
+    // Modal functions
+    function openVipModal() {
+        vipModal.style.display = 'block';
+    }
+
+    function closeVipModal() {
+        vipModal.style.display = 'none';
+    }
+
+    function openLoginModal() {
+        loginModal.style.display = 'block';
+    }
+
+    function closeLoginModal() {
+        loginModal.style.display = 'none';
+    }
+
+    function subscribeVip(plan) {
+        showVipNotification(`You have successfully subscribed to VIP ${plan.toUpperCase()} plan!`);
+        closeVipModal();
+        // In a real app, this would redirect to payment processing
+    }
+
+    // Login form handler
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('vipUsername').value;
+        const password = document.getElementById('vipPassword').value;
+        
+        // Check credentials (in a real app, this would be a server call)
+        let authenticated = false;
+        let level = null;
+        
+        for (const [key, creds] of Object.entries(vipCredentials)) {
+            if (username === creds.username && password === creds.password) {
+                authenticated = true;
+                level = creds.level;
+                break;
+            }
+        }
+        
+        if (authenticated) {
+            isVip = true;
+            vipLevel = level;
+            localStorage.setItem('isVip', 'true');
+            localStorage.setItem('vipLevel', level);
+            updateVipStatus();
+            showVipNotification(`VIP ${level.toUpperCase()} login successful! Welcome back!`);
+            closeLoginModal();
+        } else {
+            showNotification('Invalid VIP credentials. Please try again.', false);
+        }
+    });
+
+    // Update VIP status in UI
+    function updateVipStatus() {
+        if (isVip) {
+            vipLoginBtn.innerHTML = `<i class="fas fa-crown"></i> VIP ${vipLevel ? vipLevel.toUpperCase() : ''}`;
+            vipLoginBtn.onclick = function() {
+                showVipNotification(`You are logged in as VIP ${vipLevel.toUpperCase()} member`);
+            };
+        } else {
+            vipLoginBtn.innerHTML = `<i class="fas fa-lock"></i> VIP Login`;
+            vipLoginBtn.onclick = openLoginModal;
+        }
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+        if (event.target == vipModal) {
+            closeVipModal();
+        }
+        if (event.target == loginModal) {
+            closeLoginModal();
+        }
+    }
+
+    // Notification function
+    const showNotification = (message, isWin) => {
+        notificationElement.innerHTML = `<i class="fas ${isWin ? 'fa-trophy' : 'fa-times'}"></i> ${message}`;
+        notificationElement.className = isWin ? 'notification notification-success' : 'notification notification-error';
+        notificationElement.style.display = 'flex';
+        
+        // Play sound
+        if (isWin) {
+            winSound.play().catch(e => console.log('Audio play failed:', e));
+        } else {
+            lossSound.play().catch(e => console.log('Audio play failed:', e));
+        }
+        
+        setTimeout(() => {
+            notificationElement.style.display = 'none';
+        }, 3000);
+    };
+
+    // VIP Notification function
+    const showVipNotification = (message) => {
+        notificationElement.innerHTML = `<i class="fas fa-crown"></i> ${message}`;
+        notificationElement.className = 'notification vip-notification';
+        notificationElement.style.display = 'flex';
+        
+        // Play VIP sound
+        vipSound.play().catch(e => console.log('Audio play failed:', e));
+        
+        setTimeout(() => {
+            notificationElement.style.display = 'none';
+        }, 3000);
+    };
+
+    // Update stats display
+    const updateStats = () => {
+        if (predictionHistory.length === 0) return;
+        
+        // Filter VIP predictions if user is VIP
+        const historyToUse = isVip ? predictionHistory : predictionHistory.filter(p => !p.isVip);
+        
+        if (historyToUse.length === 0) {
+            winRateElement.textContent = '--%';
+            lossRateElement.textContent = '--%';
+            currentStreakElement.textContent = '--';
+            accuracyElement.textContent = '--%';
+            return;
+        }
+        
+        const wins = historyToUse.filter(item => item.result === 'WIN').length;
+        const losses = historyToUse.length - wins;
+        const winRate = Math.round((wins / historyToUse.length) * 100);
+        const lossRate = 100 - winRate;
+        
+        // Calculate current streak
+        currentStreak = 0;
+        let lastResult = historyToUse[0].result;
+        for (let i = 0; i < historyToUse.length; i++) {
+            if (historyToUse[i].result === lastResult) {
+                currentStreak++;
+            } else {
+                break;
+            }
+        }
+        
+        if (lastResult === 'LOSS') {
+            currentStreak = -currentStreak;
+        }
+        
+        // Update max streak if current is higher
+        if (Math.abs(currentStreak) > maxStreak) {
+            maxStreak = Math.abs(currentStreak);
+        }
+        
+        winRateElement.textContent = `${winRate}%`;
+        lossRateElement.textContent = `${lossRate}%`;
+        currentStreakElement.textContent = currentStreak > 0 ? `${currentStreak} WINS` : `${Math.abs(currentStreak)} LOSSES`;
+        accuracyElement.textContent = `${winRate}%`;
+    };
+
+    // API fetch functions
+    const fetchNoAverageEmerdList = async () => {
+        const requestData = {
+            pageSize: 10,
+            pageNo: 1,
+            typeId: 1,
+            language: 0,
+            random: "ded40537a2ce416e96c00e5218f6859a",
+            signature: "69306982EEEB19FA940D72EC93C62552",
+            timestamp: Math.floor(Date.now() / 1000)
+        };
+
+        try {
+            const response = await fetch('https://api.bdg88zf.com/api/webapi/GetNoaverageEmerdList', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Accept': 'application/json, text/plain, */*'
+                },
+                body: JSON.stringify(requestData)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return null;
+        }
+    };
+
+    const fetchGameIssue = async () => {
+        const requestData = {
+            typeId: 1,
+            language: 0,
+            random: "f8dcb5c527814db68800e3946a2b60e8",
+            signature: "08CF7FF3339ED58D4743F4B650FCBEA9",
+            timestamp: Math.floor(Date.now() / 1000)
+        };
+
+        try {
+            const response = await fetch('https://api.bdg88zf.com/api/webapi/GetGameIssue', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Accept': 'application/json, text/plain, */*'
+                },
+                body: JSON.stringify(requestData)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching game issue:', error);
+            return null;
+        }
+    };
+
+    // Game logic functions
+    const categorizeNumber = (number) => {
+        if (number >= 0 && number <= 4) return 'SMALL';
+        if (number >= 5 && number <= 9) return 'BIG';
+        return 'UNKNOWN';
+    };
+
+    const generateRandomPrediction = () => {
+        // For VIP users, we can adjust the algorithm to be more accurate
+        if (isVip) {
+            // VIP gets better odds based on their level
+            let accuracyBoost = 0.6; // Default for bronze
+            if (vipLevel === 'silver') accuracyBoost = 0.7;
+            if (vipLevel === 'gold') accuracyBoost = 0.8;
+            
+            const shouldBeCorrect = Math.random() < accuracyBoost;
+            if (shouldBeCorrect) {
+                // Get the last 5 numbers to find a pattern
+                const lastNumbers = predictionHistory.slice(0, 5).map(item => item.actualNumber);
+                const mostCommon = findMostCommon(lastNumbers);
+                
+                if (mostCommon !== null) {
+                    // More sophisticated pattern for higher VIP levels
+                    let predictedNum;
+                    if (vipLevel === 'gold') {
+                        predictedNum = (mostCommon + 3) % 10; // Complex pattern for gold
+                    } else if (vipLevel === 'silver') {
+                        predictedNum = (mostCommon + 2) % 10; // Medium pattern for silver
+                    } else {
+                        predictedNum = (mostCommon + 1) % 10; // Simple pattern for bronze
+                    }
+                    
+                    return { 
+                        number: predictedNum, 
+                        category: categorizeNumber(predictedNum),
+                        isVip: true,
+                        vipLevel: vipLevel
+                    };
+                }
+            }
+        }
+        
+        // Fallback to random for non-VIP or when no pattern found
+        const randomNumber = Math.floor(Math.random() * 10);
+        return { 
+            number: randomNumber, 
+            category: categorizeNumber(randomNumber),
+            isVip: false
+        };
+    };
+
+    const findMostCommon = (numbers) => {
+        if (numbers.length === 0) return null;
+        
+        const frequency = {};
+        numbers.forEach(num => {
+            frequency[num] = (frequency[num] || 0) + 1;
+        });
+        
+        return parseInt(Object.keys(frequency).reduce((a, b) => 
+            frequency[a] > frequency[b] ? a : b
+        ));
+    };
+
+    const updateDataAndPrediction = async () => {
+        const now = Date.now();
+        if (now - lastUpdateTime < 1000) return;
+        lastUpdateTime = now;
+
+        try {
+            const data = await fetchNoAverageEmerdList();
+            if (!data?.data?.list?.length) {
+                console.error('Invalid data received');
+                return;
+            }
+            
+            const list = data.data.list;
+            tableBody.innerHTML = '';
+            list.forEach(item => {
+                const number = Number(item.number);
+                const category = categorizeNumber(number);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.issueNumber}</td>
+                    <td>${number}</td>
+                    <td>${item.colour}</td>
+                    <td>${category}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            const latestIssue = list[0].issueNumber;
+            const latestActual = Number(list[0].number);
+            const actualCategory = categorizeNumber(latestActual);
+
+            if (!lastPrediction || lastPrediction.issueNumber !== latestIssue) {
+                if (lastPrediction) {
+                    const result = lastPrediction.category === actualCategory ? 'WIN' : 'LOSS';
+                    predictionHistory.unshift({
+                        issueNumber: latestIssue,
+                        predictedNumber: lastPrediction.number,
+                        predictedCategory: lastPrediction.category,
+                        actualNumber: latestActual,
+                        actualCategory: actualCategory,
+                        result: result,
+                        isVip: lastPrediction.isVip || false,
+                        vipLevel: lastPrediction.vipLevel || null
+                    });
+                    
+                    // Show notification
+                    if (lastPrediction.isVip) {
+                        showVipNotification(
+                            result === 'WIN' 
+                                ? `VIP ${lastPrediction.vipLevel ? lastPrediction.vipLevel.toUpperCase() : ''} PREDICTION CORRECT! WINNING STREAK CONTINUES!` 
+                                : `VIP ${lastPrediction.vipLevel ? lastPrediction.vipLevel.toUpperCase() : ''} PREDICTION MISSED. ANALYZING NEW PATTERNS...`
+                        );
+                    } else {
+                        showNotification(
+                            result === 'WIN' 
+                                ? 'CONGRATULATIONS! PREDICTION CORRECT!' 
+                                : 'PREDICTION INCORRECT. TRY AGAIN!',
+                            result === 'WIN'
+                        );
+                    }
+                    
+                    localStorage.setItem('predictionHistory', JSON.stringify(predictionHistory));
+                    updateStats();
+                }
+
+                currentPrediction = generateRandomPrediction();
+                currentPrediction.issueNumber = latestIssue;
+                localStorage.setItem('currentPrediction', JSON.stringify(currentPrediction));
+            }
+
+            predictedNumberElement.textContent = currentPrediction.number;
+            if (currentPrediction.isVip) {
+                predictedPremiumElement.innerHTML = `VIP ${currentPrediction.vipLevel ? currentPrediction.vipLevel.toUpperCase() : ''} BET: ${currentPrediction.category} <span style="color: var(--vip-gold)">(${currentPrediction.category === 'BIG' ? '5-9' : '0-4'})</span>`;
+            } else {
+                predictedPremiumElement.textContent = `BET: ${currentPrediction.category} (${currentPrediction.category === 'BIG' ? '5-9' : '0-4'})`;
+            }
+
+            lastPrediction = {
+                issueNumber: latestIssue,
+                number: currentPrediction.number,
+                category: currentPrediction.category,
+                isVip: currentPrediction.isVip,
+                vipLevel: currentPrediction.vipLevel
+            };
+            localStorage.setItem('lastPrediction', JSON.stringify(lastPrediction));
+
+            updatePredictionHistoryTable();
+        } catch (error) {
+            console.error('Error updating data:', error);
+        }
+    };
+
+    const updatePredictionHistoryTable = () => {
+        historyTableBody.innerHTML = '';
+
+        const start = currentPage * itemsPerPage;
+        const end = start + itemsPerPage;
+        const paginatedHistory = predictionHistory.slice(start, end);
+
+        paginatedHistory.forEach(entry => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${entry.issueNumber}</td>
+                <td>${entry.predictedNumber} (${entry.predictedCategory}) ${entry.isVip ? `<i class="fas fa-crown" style="color: ${getVipColor(entry.vipLevel)}; margin-left: 5px;"></i>` : ''}</td>
+                <td>${entry.actualNumber} (${entry.actualCategory})</td>
+                <td><span class="status-badge ${entry.result === 'WIN' ? 'status-win' : 'status-loss'} ${entry.isVip ? 'vip-status' : ''}">${entry.result} ${entry.isVip ? `<i class="fas fa-crown" style="color: ${getVipColor(entry.vipLevel)}"></i>` : ''}</span></td>
+            `;
+            historyTableBody.appendChild(row);
+        });
+
+        prevPageButton.disabled = currentPage === 0;
+        nextPageButton.disabled = (currentPage + 1) * itemsPerPage >= predictionHistory.length;
+    };
+
+    const getVipColor = (level) => {
+        if (!level) return 'var(--vip-gold)';
+        switch(level.toLowerCase()) {
+            case 'bronze': return '#cd7f32';
+            case 'silver': return '#c0c0c0';
+            case 'gold': return 'var(--vip-gold)';
+            default: return 'var(--vip-gold)';
+        }
+    };
+
+    const updateTimer = async () => {
+        try {
+            const data = await fetchGameIssue();
+            if (!data?.data) {
+                console.error('Invalid timer data');
+                return;
+            }
+            
+            const { endTime } = data.data;
+            const endDate = new Date(endTime);
+            const now = new Date();
+            const remainingTimeMs = endDate - now;
+
+            if (remainingTimeMs <= 0) {
+                timerElement.textContent = "00:00:00";
+                await updateDataAndPrediction();
+            } else {
+                const hours = String(Math.floor(remainingTimeMs / (1000 * 60 * 60))).padStart(2, '0');
+                const minutes = String(Math.floor((remainingTimeMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                const seconds = String(Math.floor((remainingTimeMs % (1000 * 60)) / 1000)).padStart(2, '0');
+                timerElement.textContent = `${hours}:${minutes}:${seconds}`;
+            }
+        } catch (error) {
+            console.error('Error updating timer:', error);
+        }
+    };
+
+    // Pagination controls
+    prevPageButton.addEventListener('click', () => {
+        if (currentPage > 0) {
+            currentPage--;
+            updatePredictionHistoryTable();
+        }
+    });
+
+    nextPageButton.addEventListener('click', () => {
+        if ((currentPage + 1) * itemsPerPage < predictionHistory.length) {
+            currentPage++;
+            updatePredictionHistoryTable();
+        }
+    });
+
+    // Initialize
+    updateDataAndPrediction();
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
+    updateStats();
+
+    // Auto-refresh every 60 seconds
+    const pageRefreshInterval = setInterval(() => {
+        location.reload();
+    }, 60000);
+
+    // Clean up
+    window.addEventListener('beforeunload', () => {
+        clearInterval(timerInterval);
+        clearInterval(pageRefreshInterval);
+    });
+});
+</script>
 </body>
 </html>
